@@ -1,20 +1,17 @@
 #include <stdio.h>
 
 int numberOfPairs(int n, int s, int* v) {
-    int numberOfPairs = 0;
-    int hashTable[10001] = {0};
+    int countNumberOfPairs = 0;
 
     for (int i = 0; i < n; i++) {
-        int complement = s - v[i];
-
-        if (complement >= 1 && complement <= 10000 && hashTable[complement] > 0) {
-            numberOfPairs++;
+        for (int j = i + 1; j <= n - 1; j++) {
+            if (v[i] + v[j] == s) {
+                countNumberOfPairs++;
+            }
         }
-
-        hashTable[v[i]]++;
     }
 
-    return numberOfPairs;
+    return countNumberOfPairs;
 }
 
 int main() {
