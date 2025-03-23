@@ -1,28 +1,21 @@
 #include <stdio.h>
 
-int numberOfPairs(int n, int s, int* v) {
-    int countNumberOfPairs = 0;
-
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j <= n - 1; j++) {
-            if (v[i] + v[j] == s) {
-                countNumberOfPairs++;
-            }
-        }
-    }
-
-    return countNumberOfPairs;
-}
-
 int main() {
     int n, s;
+    int currentElement = 0;
+    int countNumberOfPairs = 0;
+    int hashTable[32001] = {0};
+
     scanf("%d %d", &n, &s);
 
-    int v[n];
     for (int i = 0; i < n; i++) {
-        scanf("%d", &v[i]);
+        scanf("%d", &currentElement);
+        int complement = s - currentElement;
+
+        countNumberOfPairs += (complement >= 1 && complement <= 32001) ? hashTable[complement] : 0;
+        hashTable[currentElement]++;
     }
 
-    printf("%d\n", numberOfPairs(n, s, v));
+    printf("%d\n", countNumberOfPairs);
     return 0;
 }
