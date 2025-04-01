@@ -1,11 +1,29 @@
 #include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+#include <stdbool.h>
 
-#define MAX_SUMS 1000 // Define um limite máximo para armazenar somas únicas
+#define MAX_SUM 100000000
+
+int set_size;
+bool hashTable[MAX_SUM] = {false};
+int uniqueCount = 0;
+
+void backtracking(int v[], int k, int current_sum) {
+    if (k == set_size) {
+        if (current_sum > 0 && !hashTable[current_sum]) {
+            hashTable[current_sum] = true;
+            uniqueCount++;
+        }
+        return;
+    }
+
+    // Inclui o elemento atual na soma
+    backtracking(v, k + 1, current_sum + v[k]);
+
+    // Exclui o elemento atual da soma
+    backtracking(v, k + 1, current_sum);
+}
 
 int main() {
-    int set_size;
     scanf("%d", &set_size);
 
     int set[set_size];
@@ -13,33 +31,8 @@ int main() {
         scanf("%d", &set[i]);
     }
 
-    int totalSubsets = (int)pow(2, set_size) - 1; // Calcula 2^n - 1
-    
-    int uniqueSums[MAX_SUMS] = {0};
-    int uniqueCount = 0;
-    
-    for (int mask = 1; mask < (1 << set_size); mask++) { // Percorre todas as combinações exceto o conjunto vazio
-        int sum = 0;
+    backtracking(set, 0, 0);
 
-        for (int i = 0; i < set_size; i++) {
-            if (mask & (1 << i)) { // Verifica se o bit está ativado
-                sum += set[i];
-            }
-        }
-        
-        // Verifica se a soma já foi registrada
-        int isNew = 1;
-        for (int i = 0; i < uniqueCount; i++) {
-            if (uniqueSums[i] == sum) {
-                isNew = 0;
-                break;
-            }
-        }
-        if (isNew) {
-            uniqueSums[uniqueCount++] = sum;
-        }
-    }
-    
     printf("%d\n", uniqueCount);
     return 0;
 }
